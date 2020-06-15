@@ -19,13 +19,13 @@ public class Window extends JFrame {
         singleton.setSize(800, 600);
         singleton.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         singleton.setLayout(null);
-        singleton.addComponentListener(new WindowListener());
         singleton.setVisible(true);
         this.border = singleton.getInsets();
         singleton.setMinimumSize(this.includeBorder(800, 600));
         singleton.setSize(this.includeBorder(800, 600));
+        singleton.addComponentListener(new WindowListener());
 
-        System.out.println(this.border.left + " " + this.border.right + " " + this.border.top + " " + this.border.bottom);
+        //System.out.println(this.border.left + " " + this.border.right + " " + this.border.top + " " + this.border.bottom);
     }
 
     public Dimension includeBorder(int width, int height) {
@@ -33,11 +33,11 @@ public class Window extends JFrame {
     }
 
     public int getWidthBorder() {
-        return this.border.top + this.border.bottom;
+        return this.border.right + this.border.left;
     }
 
     public int getHeightBorder() {
-        return this.border.right + this.border.left;
+        return this.border.top + this.border.bottom;
     }
 
     public class WindowListener implements ComponentListener {

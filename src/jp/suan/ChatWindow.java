@@ -10,7 +10,8 @@ public class ChatWindow {
 
     public ChatWindow() {
         JP = new JPanel();
-        JP.setBounds(Window.singleton.border.left + 300, Window.singleton.border.top, 500, 600);
+        //JP.setBounds(Window.singleton.border.left + 300, Window.singleton.border.top, 500, 600);
+        JP.setBounds(300, 0, 500, 600);
         JP.setBackground(Color.BLUE);
     }
 
@@ -20,5 +21,6 @@ public class ChatWindow {
 
     public void resetWindowSize() {
         JP.setSize(Window.singleton.getWidth() - 300 - Window.singleton.getWidthBorder(), Window.singleton.getHeight() - Window.singleton.getHeightBorder());
+        //System.out.println(Window.singleton.getWidth() - 300 - Window.singleton.getWidthBorder() + " " + Window.singleton.getWidthBorder());
     }
 }

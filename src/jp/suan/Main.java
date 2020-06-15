@@ -6,5 +6,6 @@ public class Main {
         Thread.sleep(1000);
         UserSelectWindow.singleton.setWindow();
         ChatWindow.singleton.setWindow();
+        Window.singleton.repaint();
     }
 }
