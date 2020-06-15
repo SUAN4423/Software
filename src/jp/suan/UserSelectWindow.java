@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserSelectWindow {
     public static UserSelectWindow singleton = new UserSelectWindow();
@@ -105,6 +107,12 @@ public class UserSelectWindow {
     }
 
     public void AddAddress() {
+        Pattern p = Pattern.compile("^[0-9a-zA-Z.]*$");
+        Matcher m = p.matcher(IPField.getText());
+        if(!m.find()){
+            JOptionPane.showMessageDialog(Window.singleton, "アドレスを入力してください。", "エラー", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         ChatLog add = new ChatLog("TEST", IPField.getText(), UserList.size());
         UserList.add(add);
         User.add(UserList.get(UserList.size() - 1).JPWindow_UserSelect);
