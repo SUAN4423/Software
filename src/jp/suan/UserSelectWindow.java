@@ -13,7 +13,7 @@ public class UserSelectWindow {
 
     public JPanel JP;
 
-    public JPanel IPAdress;
+    public JPanel IPAddress;
     public JButton IPButton;
     public JTextField IPField;
 
@@ -24,21 +24,21 @@ public class UserSelectWindow {
         this.JP.setBounds(0, 0, 300, 600);
         this.JP.setBackground(Color.RED);
 
-        this.IPAdress = new JPanel();
-        this.IPAdress.setBounds(0, 0, 300, 30);
-        this.IPAdress.setBackground(Color.YELLOW);
+        this.IPAddress = new JPanel();
+        this.IPAddress.setBounds(0, 0, 300, 30);
+        this.IPAddress.setBackground(Color.YELLOW);
         this.IPButton = new JButton();
         this.IPButton.setMargin(new Insets(0, 0, 0, 0));
         this.IPButton.setText("会話開始");
         this.IPButton.addActionListener(new ButtonListener());
         this.IPButton.setBounds(200, 0, 100, 30);
-        this.IPAdress.add(this.IPButton);
+        this.IPAddress.add(this.IPButton);
         this.IPField = new JTextField("アドレスを入力");
         this.IPField.setBounds(0, 0, 200, 30);
         this.IPField.setHorizontalAlignment(JTextField.CENTER);
         this.IPField.addFocusListener(new GrayText(this.IPField));
         this.JP.add(this.IPField);
-        this.JP.add(this.IPAdress);
+        this.JP.add(this.IPAddress);
 
         this.User = new JPanel();
         this.User.setBackground(Color.MAGENTA);
@@ -52,7 +52,7 @@ public class UserSelectWindow {
 
     public void resetWindowSize() {
         this.JP.setSize(300, Window.singleton.getHeight() - Window.singleton.getHeightBorder());
-        this.IPAdress.setBounds(0, 0, 300, 30);
+        this.IPAddress.setBounds(0, 0, 300, 30);
         this.IPButton.setBounds(200, 0, 100, 30);
         this.IPField.setBounds(0, 0, 200, 30);
         this.User.setBounds(0, 30, 300, this.JP.getHeight() - 30);

@@ -1,5 +1,7 @@
 package jp.suan;
 
+import sun.font.FontDesignMetrics;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +13,7 @@ public class ChatWindow {
     public JPanel JP;
 
     public JPanel Name;
+    public JLabel NameDisplay;
 
     public JPanel Display;
 
@@ -51,6 +54,22 @@ public class ChatWindow {
         Name = new JPanel();
         Name.setBounds(0, 0, 500, 50);
         Name.setBackground(new Color(0xC0FFEE));
+        NameDisplay = new JLabel("null");
+        Font font = null;
+        for (int i = 1; ; i++) {
+            font = new Font(Font.DIALOG, Font.PLAIN, i);
+            FontMetrics fontMetrics = FontDesignMetrics.getMetrics(font);
+            int height = fontMetrics.getHeight();
+            if (height > 50) {
+                font = new Font(Font.DIALOG, Font.PLAIN, i - 1);
+                break;
+            }
+        }
+        NameDisplay.setFont(font);
+        NameDisplay.setBounds(0, 0, 500, 50);
+        NameDisplay.setHorizontalAlignment(JLabel.CENTER);
+        NameDisplay.setVerticalAlignment(JLabel.CENTER);
+        Name.add(NameDisplay);
         JP.add(Name);
     }
 
@@ -66,6 +85,7 @@ public class ChatWindow {
         ChatSend.setBounds(Chat.getWidth() - 100, Chat.getHeight() - 30, 100, 30);
         Display.setBounds(0, 50, JP.getWidth(), JP.getHeight() - 150);
         Name.setBounds(0, 0, JP.getWidth(), 50);
+        NameDisplay.setBounds(0, 0, JP.getWidth(), 50);
     }
 
     public class ButtonListener implements ActionListener {
