@@ -10,6 +10,8 @@ public class Window extends JFrame {
 
     public Insets border;
 
+    public ChatLog nowSelected = null;
+
     public void makeWindow() {
         this.makeWindow("No title");
     }

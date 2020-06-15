@@ -16,6 +16,7 @@ public class ChatWindow {
     public JLabel NameDisplay;
 
     public JPanel Display;
+    public JScrollPane DisplayScroll;
 
     public JPanel Chat;
     public JTextArea ChatArea;
@@ -24,10 +25,12 @@ public class ChatWindow {
 
     public ChatWindow() {
         JP = new JPanel();
+        JP.setLayout(null);
         JP.setBounds(300, 0, 500, 600);
         JP.setBackground(Color.BLUE);
 
         Chat = new JPanel();
+        Chat.setLayout(null);
         Chat.setBounds(0, 500, 500, 100);
         Chat.setBackground(Color.CYAN);
         ChatArea = new JTextArea();
@@ -49,9 +52,13 @@ public class ChatWindow {
         Display = new JPanel();
         Display.setBounds(0, 50, 500, 480);
         Display.setBackground(Color.ORANGE);
-        JP.add(Display);
+        DisplayScroll = new JScrollPane(Display, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        DisplayScroll.setBounds(0, 50, 500, 480);
+        //JP.add(Display);
+        JP.add(DisplayScroll);
 
         Name = new JPanel();
+        Name.setLayout(null);
         Name.setBounds(0, 0, 500, 50);
         Name.setBackground(new Color(0xC0FFEE));
         NameDisplay = new JLabel("null");
@@ -84,6 +91,7 @@ public class ChatWindow {
         ChatScroll.setBounds(0, 0, Chat.getWidth(), Chat.getHeight() - 30);
         ChatSend.setBounds(Chat.getWidth() - 100, Chat.getHeight() - 30, 100, 30);
         Display.setBounds(0, 50, JP.getWidth(), JP.getHeight() - 150);
+        DisplayScroll.setBounds(0, 50, JP.getWidth(), JP.getHeight() - 150);
         Name.setBounds(0, 0, JP.getWidth(), 50);
         NameDisplay.setBounds(0, 0, JP.getWidth(), 50);
     }
