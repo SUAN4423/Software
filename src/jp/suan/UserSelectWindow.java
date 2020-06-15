@@ -1,7 +1,6 @@
 package jp.suan;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +21,6 @@ public class UserSelectWindow {
 
     public UserSelectWindow() {
         this.JP = new JPanel();
-        //JP.setBounds(Window.singleton.border.left, Window.singleton.border.top, 300, 600);
         this.JP.setBounds(0, 0, 300, 600);
         this.JP.setBackground(Color.RED);
 
