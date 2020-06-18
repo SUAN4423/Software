@@ -124,10 +124,14 @@ public class ChatWindow {
         if (!messagesending[0]) {
             JOptionPane.showMessageDialog(Window.singleton, "メッセージの送信に失敗しました。", "エラー", JOptionPane.ERROR_MESSAGE);
         } else {
-            JLabel jl = new JLabel(ChatArea.getText());
-            jl.setHorizontalAlignment(JLabel.RIGHT);
-            Window.singleton.nowSelected.Messages.add(jl);
-            Window.singleton.nowSelected.JPWindow_Chat.add(jl);
+            Text n = new Text();
+            n.JArea = new JTextArea(ChatArea.getText());
+            n.Me = true;
+            n.JArea.setEditable(false);
+            n.JArea.setLineWrap(true);
+            n.JArea.setBackground(Color.GREEN);
+            Window.singleton.nowSelected.Messages.add(n);
+            Window.singleton.nowSelected.JPWindow_Chat.add(n.JArea);
             Window.singleton.nowSelected.addedMessage();
             ChatArea.setText("");
         }

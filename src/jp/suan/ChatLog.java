@@ -1,5 +1,7 @@
 package jp.suan;
 
+import jp.suan.network.Message;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -18,7 +20,7 @@ public class ChatLog {
     public JLabel IPAddress;
 
     public JPanel JPWindow_Chat;
-    public ArrayList<JLabel> Messages = new ArrayList<>();
+    public ArrayList<Text> Messages = new ArrayList<>();
     public Font chatFont;
 
     protected ChatLog MY = this;
@@ -57,10 +59,14 @@ public class ChatLog {
         IPAddress.setBounds(0, 30, JPWindow_UserSelect.getWidth(), 30);
     }
 
-    public void selectedResize(){
+    public void selectedResize() {
         JPWindow_Chat.setBounds(0, 0, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), ChatWindow.singleton.Display.getHeight());
         for (int i = 0; i < Messages.size(); i++) {
-            Messages.get(i).setBounds(0, i*60, JPWindow_UserSelect.getWidth(), 60);
+            if (Messages.get(i).Me) {
+                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+            } else {
+                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+            }
         }
     }
 
@@ -70,8 +76,11 @@ public class ChatLog {
 
     public void addedMessage() {
         for (int i = 0; i < Messages.size(); i++) {
-            Messages.get(i).setFont(chatFont);
-            Messages.get(i).setBounds(0, i*60, JPWindow_UserSelect.getWidth(), 60);
+            if (Messages.get(i).Me) {
+                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+            } else {
+                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+            }
         }
         JPWindow_Chat.repaint();
     }
