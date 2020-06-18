@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -113,7 +116,34 @@ public class UserSelectWindow {
             JOptionPane.showMessageDialog(Window.singleton, "アドレスを入力してください。", "エラー", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        ChatLog add = new ChatLog("TEST", IPField.getText(), UserList.size());
+        String UName = null;
+        try {
+            Socket socket = new Socket();// = new Socket(IPField.getText(), 8080);
+            socket.connect(new InetSocketAddress(IPField.getText(), 8080), 100);
+            PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            pr.println("[WhoAreYou]");
+            UName = br.readLine();
+            br.close();
+            pr.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(UName == null){
+            JOptionPane.showMessageDialog(Window.singleton, "相手が見つかりませんでした。", "エラー", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        for(int i = 0; i < UserList.size(); i++){
+            if(UserList.get(i).UserName.equals(UName)){
+                ChatLog ch = UserList.get(i);
+                ch.Address = IPField.getText();
+                ch.IPReflesh();
+                User.repaint();
+                return;
+            }
+        }
+        ChatLog add = new ChatLog(UName, IPField.getText(), UserList.size());
         UserList.add(add);
         User.add(UserList.get(UserList.size() - 1).JPWindow_UserSelect);
         User.setBounds(0, 0, getUserWidth(), Math.max(JP.getHeight() - 60, UserList.size() * 60));
