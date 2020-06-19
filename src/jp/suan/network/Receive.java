@@ -57,7 +57,7 @@ public class Receive extends Thread {
         @Override
         public void run() {
             try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
                 String Messages = br.readLine();
                 String receive = "";
                 String name = "";

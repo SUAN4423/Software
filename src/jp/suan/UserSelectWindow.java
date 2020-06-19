@@ -112,7 +112,7 @@ public class UserSelectWindow {
     public void AddAddress() {
         Pattern p = Pattern.compile("^[0-9a-zA-Z.]*$");
         Matcher m = p.matcher(IPField.getText());
-        if(!m.find()){
+        if (!m.find()) {
             JOptionPane.showMessageDialog(Window.singleton, "アドレスを入力してください。", "エラー", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -120,8 +120,8 @@ public class UserSelectWindow {
         try {
             Socket socket = new Socket();// = new Socket(IPField.getText(), 8080);
             socket.connect(new InetSocketAddress(IPField.getText(), 8080), 100);
-            PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")), true);
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             pr.println("[WhoAreYou]");
             UName = br.readLine();
             br.close();
@@ -130,12 +130,12 @@ public class UserSelectWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(UName == null){
+        if (UName == null) {
             JOptionPane.showMessageDialog(Window.singleton, "相手が見つかりませんでした。", "エラー", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        for(int i = 0; i < UserList.size(); i++){
-            if(UserList.get(i).UserName.equals(UName)){
+        for (int i = 0; i < UserList.size(); i++) {
+            if (UserList.get(i).UserName.equals(UName)) {
                 ChatLog ch = UserList.get(i);
                 ch.Address = IPField.getText();
                 ch.IPReflesh();
@@ -157,7 +157,7 @@ public class UserSelectWindow {
         }
     }
 
-    public class EnterListener implements ActionListener{
+    public class EnterListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             AddAddress();
