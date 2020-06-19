@@ -29,7 +29,7 @@ public class Send extends Thread {
         } else {
             try {
                 Socket socket = new Socket();//(this.sendmessage.ToAddress, 8080);
-                socket.connect(new InetSocketAddress(this.sendmessage.ToAddress, 8080), 100);
+                socket.connect(new InetSocketAddress(this.sendmessage.ToAddress, 8080), 2000);
                 PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")), true);
                 pr.println(UserSelectWindow.singleton.Name.getText());
                 pr.println(this.sendmessage.Messages);

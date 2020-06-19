@@ -119,7 +119,7 @@ public class UserSelectWindow {
         String UName = null;
         try {
             Socket socket = new Socket();// = new Socket(IPField.getText(), 8080);
-            socket.connect(new InetSocketAddress(IPField.getText(), 8080), 100);
+            socket.connect(new InetSocketAddress(IPField.getText(), 8080), 2000);
             PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")), true);
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             pr.println("[WhoAreYou]");
