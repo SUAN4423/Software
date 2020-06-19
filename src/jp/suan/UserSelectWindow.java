@@ -110,7 +110,7 @@ public class UserSelectWindow {
     }
 
     public void AddAddress() {
-        Pattern p = Pattern.compile("^[0-9a-zA-Z.]*$");
+        Pattern p = Pattern.compile("^[0-9a-zA-Z.:\\[\\]]*$");
         Matcher m = p.matcher(IPField.getText());
         if (!m.find()) {
             JOptionPane.showMessageDialog(Window.singleton, "アドレスを入力してください。", "エラー", JOptionPane.ERROR_MESSAGE);
