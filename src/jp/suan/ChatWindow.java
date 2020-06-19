@@ -67,6 +67,7 @@ public class ChatWindow {
         Display.setBackground(Color.ORANGE);
         DisplayScroll = new JScrollPane(Display, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         DisplayScroll.setBounds(0, 50, 500, 480);
+        DisplayScroll.getVerticalScrollBar().setUnitIncrement(30);
         //JP.add(Display);
         JP.add(DisplayScroll);
 
@@ -137,6 +138,7 @@ public class ChatWindow {
             Window.singleton.nowSelected.Messages.add(n);
             Window.singleton.nowSelected.JPWindow_Chat.add(n.JArea);
             Window.singleton.nowSelected.addedMessage();
+            Display.setBounds(0, 50, getDisplayWidth(JP.getWidth()), Math.max(JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
             ChatArea.setText("");
         }
         messagesending[2] = false;

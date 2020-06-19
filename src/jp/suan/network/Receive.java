@@ -1,17 +1,14 @@
 package jp.suan.network;
 
-import jp.suan.ChatLog;
-import jp.suan.Text;
-import jp.suan.UserSelectWindow;
+import jp.suan.*;
+import jp.suan.Window;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Receive extends Thread {
 
@@ -93,6 +90,9 @@ public class Receive extends Thread {
                             UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
                             UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.JArea);
                             UserSelectWindow.singleton.UserList.get(i).addedMessage();
+                            if (UserSelectWindow.singleton.UserList.get(i)==Window.singleton.nowSelected){
+                                ChatWindow.singleton.Display.setBounds(0, 50, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), Math.max(ChatWindow.singleton.JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
+                            }
                             b = true;
                             break;
                         }
