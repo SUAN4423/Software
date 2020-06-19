@@ -81,7 +81,7 @@ public class Receive extends Thread {
                     for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
                         if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
                             UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
-                            UserSelectWindow.singleton.UserList.get(i).IPAddress.setText(ms.FromAddress);
+                            UserSelectWindow.singleton.UserList.get(i).IPAddress.setText("Address : " + ms.FromAddress);
                             Text n = new Text();
                             n.JArea = new JTextArea(ms.Messages);
                             n.JArea.setLayout(null);
