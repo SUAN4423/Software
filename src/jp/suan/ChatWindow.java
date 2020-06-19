@@ -6,6 +6,7 @@ import jp.suan.network.Send;
 import sun.font.FontDesignMetrics;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -107,6 +108,7 @@ public class ChatWindow {
         else {
             Display.setBounds(0, 50, getDisplayWidth(JP.getWidth()), Math.max(JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
             Window.singleton.nowSelected.selectedResize();
+            Display.setBounds(0, 50, getDisplayWidth(JP.getWidth()), Math.max(JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
         }
         DisplayScroll.setBounds(0, 50, JP.getWidth(), JP.getHeight() - 150);
         Name.setBounds(0, 0, JP.getWidth(), 50);
@@ -126,10 +128,12 @@ public class ChatWindow {
         } else {
             Text n = new Text();
             n.JArea = new JTextArea(ChatArea.getText());
+            n.JArea.setLayout(null);
             n.Me = true;
             n.JArea.setEditable(false);
             n.JArea.setLineWrap(true);
             n.JArea.setBackground(Color.GREEN);
+            n.JArea.setBorder(new LineBorder(Color.BLACK));
             Window.singleton.nowSelected.Messages.add(n);
             Window.singleton.nowSelected.JPWindow_Chat.add(n.JArea);
             Window.singleton.nowSelected.addedMessage();
@@ -145,6 +149,7 @@ public class ChatWindow {
                 JOptionPane.showMessageDialog(Window.singleton, "送信先を選択してください。", "エラー", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (!messagesending[2]) {
+                    System.out.println("Address : " + Window.singleton.nowSelected.Address);
                     Message sendmessage = new Message(ChatArea.getText(), Window.singleton.nowSelected.Address);
                     messagesending[1] = true;
                     messagesending[2] = true;

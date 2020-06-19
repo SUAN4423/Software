@@ -1,7 +1,9 @@
 package jp.suan;
 
 import jp.suan.network.Message;
+import sun.font.FontDesignMetrics;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -22,6 +24,7 @@ public class ChatLog {
     public JPanel JPWindow_Chat;
     public ArrayList<Text> Messages = new ArrayList<>();
     public Font chatFont;
+    public int LineHeight;
 
     protected ChatLog MY = this;
 
@@ -60,14 +63,7 @@ public class ChatLog {
     }
 
     public void selectedResize() {
-        JPWindow_Chat.setBounds(0, 0, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), ChatWindow.singleton.Display.getHeight());
-        for (int i = 0; i < Messages.size(); i++) {
-            if (Messages.get(i).Me) {
-                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
-            } else {
-                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
-            }
-        }
+        this.MessagesSize();
     }
 
     public void IPReflesh() {
@@ -75,14 +71,35 @@ public class ChatLog {
     }
 
     public void addedMessage() {
+        this.MessagesSize();
+        JPWindow_Chat.repaint();
+    }
+
+    public void MessagesSize() {
         for (int i = 0; i < Messages.size(); i++) {
             if (Messages.get(i).Me) {
-                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, 60);
             } else {
-                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth())-60, 60);
+                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, 60);
             }
         }
-        JPWindow_Chat.repaint();
+        FontMetrics fm = null;
+        int height = 0;
+        if (Messages.size() > 0) {
+            fm = FontDesignMetrics.getMetrics(Messages.get(0).JArea.getFont());
+            height = fm.getHeight();
+            LineHeight = 0;
+        }
+        for (int i = 0; i < Messages.size(); i++) {
+            if (Messages.get(i).Me) {
+                Messages.get(i).JArea.setBounds(60, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Messages.get(i).JArea.getLineCount());
+                LineHeight += height * Messages.get(i).JArea.getLineCount();
+            } else {
+                Messages.get(i).JArea.setBounds(0, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Messages.get(i).JArea.getLineCount());
+                LineHeight += height * Messages.get(i).JArea.getLineCount();
+            }
+        }
+        JPWindow_Chat.setBounds(0, 0, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), LineHeight);
     }
 
     public class SelectListener implements MouseListener {

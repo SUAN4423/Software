@@ -1,7 +1,11 @@
 package jp.suan.network;
 
+import jp.suan.Text;
 import jp.suan.UserSelectWindow;
 
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -10,14 +14,11 @@ import java.util.ArrayList;
 
 public class Receive extends Thread {
 
-    public static ArrayList<Message> receiveMessage = new ArrayList<>();
-
     @Override
     public void run() {
         super.run();
 
         ServerSocket ssocket = null;
-        Socket socket = null;
 
         while (true) {
             try {
@@ -28,39 +29,76 @@ public class Receive extends Thread {
             }
             try {
                 while (ssocket != null) {
-                    socket = ssocket.accept();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String Messages = br.readLine();
-                    String receive = "<html>";
-                    String name = "";
-                    System.out.println("Message Received : " + Messages);
-                    if (Messages.equals("[WhoAreYou]")) {
-                        PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                        pr.println(UserSelectWindow.singleton.Name.getText());
-                        pr.close();
-                    } else {
-                        name += Messages;
-                        while (!Messages.equals("[fin]")) {
-                            receive += Messages;
-                            Messages = br.readLine();
-                            System.out.println("Message Received : " + Messages);
-                            if(!Messages.equals("[fin]")) receive +=  "<br>";
-                        }
-                        receive += "</html>";
-                        Message ms = new Message(receive, socket.getLocalAddress().toString(), socket.getRemoteSocketAddress().toString(), name);
-                        receiveMessage.add(ms);
-                    }
-                    socket.close();
+                    System.out.println("待機中");
+                    Socket socket = ssocket.accept();
+                    System.out.println("Connected : " + socket);
+                    SocketThread st = new SocketThread(socket);
+                    st.start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
                 if (ssocket != null) ssocket.close();
-                if (socket != null) socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class SocketThread extends Thread {
+        Socket socket;
+
+        public SocketThread(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String Messages = br.readLine();
+                String receive = "";
+                String name = "";
+                System.out.println("Message Received : " + Messages);
+                if (Messages.equals("[WhoAreYou]")) {
+                    PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    pr.println(UserSelectWindow.singleton.Name.getText());
+                    pr.close();
+                } else {
+                    name += Messages;
+                    Messages = br.readLine();
+                    System.out.println("Message Received : " + Messages);
+                    while (!Messages.equals("[fin]")) {
+                        receive += Messages;
+                        Messages = br.readLine();
+                        System.out.println("Message Received : " + Messages);
+                        if (!Messages.equals("[fin]")) receive += "\n";
+                    }
+                    Message ms = new Message(receive, socket.getLocalAddress().toString(), socket.getInetAddress().toString().substring(1), name);
+                    for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
+                        if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
+                            UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
+                            UserSelectWindow.singleton.UserList.get(i).IPAddress.setText(ms.FromAddress);
+                            Text n = new Text();
+                            n.JArea = new JTextArea(ms.Messages);
+                            n.JArea.setLayout(null);
+                            n.Me = false;
+                            n.JArea.setEditable(false);
+                            n.JArea.setLineWrap(true);
+                            n.JArea.setBackground(Color.LIGHT_GRAY);
+                            n.JArea.setBorder(new LineBorder(Color.BLACK));
+                            UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
+                            UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.JArea);
+                            UserSelectWindow.singleton.UserList.get(i).addedMessage();
+                        }
+                    }
+                }
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Finish");
         }
     }
 }
