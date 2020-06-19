@@ -63,7 +63,7 @@ public class Receive extends Thread {
                 String name = "";
                 System.out.println("Message Received : " + Messages);
                 if (Messages.equals("[WhoAreYou]")) {
-                    PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8")), true);
                     pr.println(UserSelectWindow.singleton.Name.getText());
                     pr.close();
                 } else {
