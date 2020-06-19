@@ -1,5 +1,6 @@
 package jp.suan.network;
 
+import jp.suan.ChatLog;
 import jp.suan.Text;
 import jp.suan.UserSelectWindow;
 
@@ -76,6 +77,7 @@ public class Receive extends Thread {
                         if (!Messages.equals("[fin]")) receive += "\n";
                     }
                     Message ms = new Message(receive, socket.getLocalAddress().toString(), socket.getInetAddress().toString().substring(1), name);
+                    boolean b = false;
                     for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
                         if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
                             UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
@@ -91,7 +93,27 @@ public class Receive extends Thread {
                             UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
                             UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.JArea);
                             UserSelectWindow.singleton.UserList.get(i).addedMessage();
+                            b = true;
+                            break;
                         }
+                    }
+                    if (!b) {
+                        ChatLog c = new ChatLog(ms.Name, ms.FromAddress, UserSelectWindow.singleton.UserList.size());
+                        Text n = new Text();
+                        n.JArea = new JTextArea(ms.Messages);
+                        n.JArea.setLayout(null);
+                        n.Me = false;
+                        n.JArea.setEditable(false);
+                        n.JArea.setLineWrap(true);
+                        n.JArea.setBackground(Color.LIGHT_GRAY);
+                        n.JArea.setBorder(new LineBorder(Color.BLACK));
+                        c.Messages.add(n);
+                        c.JPWindow_Chat.add(n.JArea);
+                        UserSelectWindow.singleton.UserList.add(c);
+                        UserSelectWindow.singleton.User.add(UserSelectWindow.singleton.UserList.get(UserSelectWindow.singleton.UserList.size() - 1).JPWindow_UserSelect);
+                        UserSelectWindow.singleton.User.setBounds(0, 0, UserSelectWindow.singleton.getUserWidth(), Math.max(UserSelectWindow.singleton.JP.getHeight() - 60, UserSelectWindow.singleton.UserList.size() * 60));
+                        UserSelectWindow.singleton.User.repaint();
+                        c.addedMessage();
                     }
                 }
                 socket.close();
