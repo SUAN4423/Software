@@ -83,23 +83,24 @@ public class ChatLog {
             height = fm.getHeight();
             LineHeight = 0;
         }
+        int chatwindowsize = ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth());
         for (int i = 0; i < Messages.size(); i++) {
             String[] str = Messages.get(i).JArea.getText().split("\r\n|\r|\n", -1);
             int Line = 0;
             for (int j = 0; j < str.length; j++) {
                 int width = fm.stringWidth(str[j]);
-                Line += width / (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) + (width % (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) == 0 ? 0 : 1);
+                Line += width / (chatwindowsize - 60) + (width % (chatwindowsize - 60) == 0 ? 0 : 1);
                 if (str[j].equals("")) Line++;
             }
             if (Messages.get(i).Me) {
-                Messages.get(i).JArea.setBounds(60, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Line);
+                Messages.get(i).JArea.setBounds(60, LineHeight, chatwindowsize - 60, height * Line);
                 LineHeight += height * Line;
             } else {
-                Messages.get(i).JArea.setBounds(0, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Line);
+                Messages.get(i).JArea.setBounds(0, LineHeight, chatwindowsize - 60, height * Line);
                 LineHeight += height * Line;
             }
         }
-        JPWindow_Chat.setBounds(0, 0, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), LineHeight);
+        JPWindow_Chat.setBounds(0, 0, chatwindowsize, LineHeight);
     }
 
     public class SelectListener implements MouseListener {
