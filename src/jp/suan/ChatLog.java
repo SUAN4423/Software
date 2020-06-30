@@ -76,13 +76,6 @@ public class ChatLog {
     }
 
     public void MessagesSize() {
-        for (int i = 0; i < Messages.size(); i++) {
-            if (Messages.get(i).Me) {
-                Messages.get(i).JArea.setBounds(60, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, 60);
-            } else {
-                Messages.get(i).JArea.setBounds(0, i * 60, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, 60);
-            }
-        }
         FontMetrics fm = null;
         int height = 0;
         if (Messages.size() > 0) {
@@ -91,12 +84,18 @@ public class ChatLog {
             LineHeight = 0;
         }
         for (int i = 0; i < Messages.size(); i++) {
+            String[] str = Messages.get(i).JArea.getText().split("\r\n|\r|\n", -1);
+            int Line = 0;
+            for (int j = 0; j < str.length; j++) {
+                int width = fm.stringWidth(str[j]);
+                Line += width / (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) + (width % (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) == 0 ? 0 : 1);
+            }
             if (Messages.get(i).Me) {
-                Messages.get(i).JArea.setBounds(60, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Messages.get(i).JArea.getLineCount());
-                LineHeight += height * Messages.get(i).JArea.getLineCount();
+                Messages.get(i).JArea.setBounds(60, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Line);
+                LineHeight += height * Line;
             } else {
-                Messages.get(i).JArea.setBounds(0, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Messages.get(i).JArea.getLineCount());
-                LineHeight += height * Messages.get(i).JArea.getLineCount();
+                Messages.get(i).JArea.setBounds(0, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Line);
+                LineHeight += height * Line;
             }
         }
         JPWindow_Chat.setBounds(0, 0, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), LineHeight);
