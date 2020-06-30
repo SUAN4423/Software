@@ -89,6 +89,7 @@ public class ChatLog {
             for (int j = 0; j < str.length; j++) {
                 int width = fm.stringWidth(str[j]);
                 Line += width / (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) + (width % (ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60) == 0 ? 0 : 1);
+                if (str[j].equals("")) Line++;
             }
             if (Messages.get(i).Me) {
                 Messages.get(i).JArea.setBounds(60, LineHeight, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()) - 60, height * Line);
