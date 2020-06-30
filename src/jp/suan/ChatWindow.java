@@ -8,8 +8,7 @@ import sun.font.FontDesignMetrics;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class ChatWindow {
     public static ChatWindow singleton = new ChatWindow();
@@ -50,6 +49,7 @@ public class ChatWindow {
         ChatArea.setMargin(new Insets(10, 10, 10, 10));
         ChatArea.setBounds(0, 0, 500, 70);
         ChatArea.setBackground(new Color(0xE0E0E0));
+        ChatArea.addKeyListener(new keyevent());
         ChatScroll = new JScrollPane(ChatArea);
         ChatScroll.setBounds(0, 0, 500, 70);
         Chat.add(ChatScroll);
@@ -159,6 +159,36 @@ public class ChatWindow {
                     send.run();
                 }
             }
+        }
+    }
+
+    public class keyevent implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+            if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER && (keyEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+                if (Window.singleton.nowSelected == null) {
+                    JOptionPane.showMessageDialog(Window.singleton, "送信先を選択してください。", "エラー", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (!messagesending[2]) {
+                        System.out.println("Address : " + Window.singleton.nowSelected.Address);
+                        Message sendmessage = new Message(ChatArea.getText(), Window.singleton.nowSelected.Address);
+                        messagesending[1] = true;
+                        messagesending[2] = true;
+                        Send send = new Send(sendmessage, messagesending);
+                        send.run();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+
         }
     }
 }
