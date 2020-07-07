@@ -85,6 +85,8 @@ public class ChatLog {
         }
         int chatwindowsize = ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth());
         for (int i = 0; i < Messages.size(); i++) {
+            LineHeight = Messages.get(i).WindowSet(LineHeight, chatwindowsize, height, fm);
+            /*
             String[] str = Messages.get(i).JArea.getText().split("\r\n|\r|\n", -1);
             int Line = 0;
             for (int j = 0; j < str.length; j++) {
@@ -99,6 +101,7 @@ public class ChatLog {
                 Messages.get(i).JArea.setBounds(0, LineHeight, chatwindowsize - 60, height * Line);
                 LineHeight += height * Line;
             }
+            //*/
         }
         JPWindow_Chat.setBounds(0, 0, chatwindowsize, LineHeight);
     }

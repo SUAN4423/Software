@@ -1,6 +1,7 @@
 package jp.suan.network;
 
 import jp.suan.*;
+import jp.suan.Image;
 import jp.suan.Window;
 
 import javax.swing.*;
@@ -66,19 +67,81 @@ public class Receive extends Thread {
                 } else {
                     name += Messages;
                     Messages = br.readLine();
-                    System.out.println("Message Received : " + Messages);
-                    while (!Messages.equals("[fin]")) {
-                        receive += Messages;
-                        Messages = br.readLine();
+                    if (Messages.equals("[image]")) {
+                        br.close();
+                        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+                        Message recvmessage = (Message)in.readObject();
+                        Message ms = new Message(recvmessage.Images, socket.getLocalAddress().toString(), socket.getInetAddress().toString().substring(1), name);
+                        boolean b = false;
+                        for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
+                            if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
+                                UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
+                                UserSelectWindow.singleton.UserList.get(i).IPAddress.setText("Address : " + ms.FromAddress);
+                                Image n = new Image();
+                                n.Label = new JLabel();
+                                n.Label.setLayout(null);
+                                n.Me = false;
+                                n.Label.setIcon(ms.Images);
+                                UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
+                                UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.Label);
+                                UserSelectWindow.singleton.UserList.get(i).addedMessage();
+                                if (UserSelectWindow.singleton.UserList.get(i) == Window.singleton.nowSelected) {
+                                    ChatWindow.singleton.Display.setBounds(0, 50, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), Math.max(ChatWindow.singleton.JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
+                                }
+                                b = true;
+                                break;
+                            }
+                        }
+                        if (!b) {
+                            ChatLog c = new ChatLog(ms.Name, ms.FromAddress, UserSelectWindow.singleton.UserList.size());
+                            Image n = new Image();
+                            n.Label = new JLabel();
+                            n.Label.setLayout(null);
+                            n.Me = false;
+                            n.Label.setIcon(ms.Images);
+                            c.Messages.add(n);
+                            c.JPWindow_Chat.add(n.Label);
+                            UserSelectWindow.singleton.UserList.add(c);
+                            UserSelectWindow.singleton.User.add(UserSelectWindow.singleton.UserList.get(UserSelectWindow.singleton.UserList.size() - 1).JPWindow_UserSelect);
+                            UserSelectWindow.singleton.User.setBounds(0, 0, UserSelectWindow.singleton.getUserWidth(), Math.max(UserSelectWindow.singleton.JP.getHeight() - 60, UserSelectWindow.singleton.UserList.size() * 60));
+                            UserSelectWindow.singleton.User.repaint();
+                            c.addedMessage();
+                        }
+                    } else {
                         System.out.println("Message Received : " + Messages);
-                        if (!Messages.equals("[fin]")) receive += "\n";
-                    }
-                    Message ms = new Message(receive, socket.getLocalAddress().toString(), socket.getInetAddress().toString().substring(1), name);
-                    boolean b = false;
-                    for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
-                        if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
-                            UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
-                            UserSelectWindow.singleton.UserList.get(i).IPAddress.setText("Address : " + ms.FromAddress);
+                        while (!Messages.equals("[fin]")) {
+                            receive += Messages;
+                            Messages = br.readLine();
+                            System.out.println("Message Received : " + Messages);
+                            if (!Messages.equals("[fin]")) receive += "\n";
+                        }
+                        br.close();
+                        Message ms = new Message(receive, socket.getLocalAddress().toString(), socket.getInetAddress().toString().substring(1), name);
+                        boolean b = false;
+                        for (int i = 0; i < UserSelectWindow.singleton.UserList.size(); i++) {
+                            if (UserSelectWindow.singleton.UserList.get(i).UserName.equals(ms.Name)) {
+                                UserSelectWindow.singleton.UserList.get(i).Address = ms.FromAddress;
+                                UserSelectWindow.singleton.UserList.get(i).IPAddress.setText("Address : " + ms.FromAddress);
+                                Text n = new Text();
+                                n.JArea = new JTextArea(ms.Messages);
+                                n.JArea.setLayout(null);
+                                n.Me = false;
+                                n.JArea.setEditable(false);
+                                n.JArea.setLineWrap(true);
+                                n.JArea.setBackground(Color.LIGHT_GRAY);
+                                n.JArea.setBorder(new LineBorder(Color.BLACK));
+                                UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
+                                UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.JArea);
+                                UserSelectWindow.singleton.UserList.get(i).addedMessage();
+                                if (UserSelectWindow.singleton.UserList.get(i) == Window.singleton.nowSelected) {
+                                    ChatWindow.singleton.Display.setBounds(0, 50, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), Math.max(ChatWindow.singleton.JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
+                                }
+                                b = true;
+                                break;
+                            }
+                        }
+                        if (!b) {
+                            ChatLog c = new ChatLog(ms.Name, ms.FromAddress, UserSelectWindow.singleton.UserList.size());
                             Text n = new Text();
                             n.JArea = new JTextArea(ms.Messages);
                             n.JArea.setLayout(null);
@@ -87,37 +150,18 @@ public class Receive extends Thread {
                             n.JArea.setLineWrap(true);
                             n.JArea.setBackground(Color.LIGHT_GRAY);
                             n.JArea.setBorder(new LineBorder(Color.BLACK));
-                            UserSelectWindow.singleton.UserList.get(i).Messages.add(n);
-                            UserSelectWindow.singleton.UserList.get(i).JPWindow_Chat.add(n.JArea);
-                            UserSelectWindow.singleton.UserList.get(i).addedMessage();
-                            if (UserSelectWindow.singleton.UserList.get(i)==Window.singleton.nowSelected){
-                                ChatWindow.singleton.Display.setBounds(0, 50, ChatWindow.singleton.getDisplayWidth(ChatWindow.singleton.JP.getWidth()), Math.max(ChatWindow.singleton.JP.getHeight() - 150, Window.singleton.nowSelected.JPWindow_Chat.getHeight()));
-                            }
-                            b = true;
-                            break;
+                            c.Messages.add(n);
+                            c.JPWindow_Chat.add(n.JArea);
+                            UserSelectWindow.singleton.UserList.add(c);
+                            UserSelectWindow.singleton.User.add(UserSelectWindow.singleton.UserList.get(UserSelectWindow.singleton.UserList.size() - 1).JPWindow_UserSelect);
+                            UserSelectWindow.singleton.User.setBounds(0, 0, UserSelectWindow.singleton.getUserWidth(), Math.max(UserSelectWindow.singleton.JP.getHeight() - 60, UserSelectWindow.singleton.UserList.size() * 60));
+                            UserSelectWindow.singleton.User.repaint();
+                            c.addedMessage();
                         }
-                    }
-                    if (!b) {
-                        ChatLog c = new ChatLog(ms.Name, ms.FromAddress, UserSelectWindow.singleton.UserList.size());
-                        Text n = new Text();
-                        n.JArea = new JTextArea(ms.Messages);
-                        n.JArea.setLayout(null);
-                        n.Me = false;
-                        n.JArea.setEditable(false);
-                        n.JArea.setLineWrap(true);
-                        n.JArea.setBackground(Color.LIGHT_GRAY);
-                        n.JArea.setBorder(new LineBorder(Color.BLACK));
-                        c.Messages.add(n);
-                        c.JPWindow_Chat.add(n.JArea);
-                        UserSelectWindow.singleton.UserList.add(c);
-                        UserSelectWindow.singleton.User.add(UserSelectWindow.singleton.UserList.get(UserSelectWindow.singleton.UserList.size() - 1).JPWindow_UserSelect);
-                        UserSelectWindow.singleton.User.setBounds(0, 0, UserSelectWindow.singleton.getUserWidth(), Math.max(UserSelectWindow.singleton.JP.getHeight() - 60, UserSelectWindow.singleton.UserList.size() * 60));
-                        UserSelectWindow.singleton.User.repaint();
-                        c.addedMessage();
                     }
                 }
                 socket.close();
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             System.out.println("Finish");

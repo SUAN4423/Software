@@ -7,6 +7,7 @@ public class Main {
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
         Window.singleton.makeWindow("CHAT APPLICATION");
+        Window.singleton.setDropTarget(new DropTargets());
         UserSelectWindow.singleton.setWindow();
         ChatWindow.singleton.setWindow();
         Window.singleton.repaint();

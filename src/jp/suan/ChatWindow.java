@@ -32,7 +32,7 @@ public class ChatWindow {
     public JScrollPane ChatScroll;
     public JButton ChatSend;
 
-    public boolean messagesending[] = {false, false, false};
+    public boolean messagesending[] = {false, false, false, false};
 
     public ChatWindow() {
         JP = new JPanel();
@@ -155,6 +155,7 @@ public class ChatWindow {
                     Message sendmessage = new Message(ChatArea.getText(), Window.singleton.nowSelected.Address);
                     messagesending[1] = true;
                     messagesending[2] = true;
+                    messagesending[2] = false;
                     Send send = new Send(sendmessage, messagesending);
                     send.run();
                 }
