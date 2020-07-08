@@ -6,7 +6,6 @@ import jp.suan.UserSelectWindow;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Send extends Thread {
 

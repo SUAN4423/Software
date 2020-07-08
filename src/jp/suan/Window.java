@@ -19,7 +19,7 @@ public class Window extends JFrame {
     public void makeWindow(String windowname) {
         singleton.setTitle(windowname);
         singleton.setSize(800, 600);
-        singleton.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        singleton.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         singleton.setLayout(null);
         singleton.setVisible(true);
         this.border = singleton.getInsets();
